@@ -1,26 +1,42 @@
 import * as React from 'react'
-import {View, Text, Button, StyleSheet, FlatList} from 'react-native' 
-import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import {SafeAreaView, StatusBar, View, Text, Button, StyleSheet, FlatList} from 'react-native' 
 
-import response from "../../getCharacters";
 import CharacterCard from '../component/CharachterCard';
+import * as ApiUtils from '../utils/ApiUtils'
+import { URL } from '../utils/Constants';
 
 
 function SearchCharacterScreen() {
+
+  const [response, setResponse] = React.useState()
+  
+  React.useEffect(() => {
+    (async () => {
+      let res = await ApiUtils.callMarvel(URL.GET_CHARACTERS)
+      setResponse(res.data.results)
+    })()
+  }, [])
   
   function renderCard(item) {
-    return <View style={styles.container}>
-        <CharacterCard character={item} />
-      </View>
+    return <CharacterCard character={item} />
+  }
+
+  if (!response) {
+    return null
   }
 
   return (
-
-    <FlatList 
-      data = {response.data.results}
-      keyExtractor={item => item.id.toString()}
-      renderItem={({item}) => renderCard(item)}
-    />
+    <View style={styles.container}>
+      <StatusBar
+        translucent={true}
+        barStyle={'light-content'}
+      />
+      <FlatList 
+        data = {response}
+        keyExtractor={item => item.id.toString()}
+        renderItem={({item}) => renderCard(item)}
+      />
+    </View>
   )
 }
 
@@ -29,5 +45,6 @@ export default SearchCharacterScreen
 const styles = StyleSheet.create({
   container: {
       flex: 1,
+      backgroundColor: 'black',
   },
 });

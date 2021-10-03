@@ -6,10 +6,10 @@ import CharacterDetailsScreen from './screens/CharacterDetailsScreen';
 
 const SearchStack = createNativeStackNavigator();
 
-function SearchStackNavigator() {
+function SearchStackNavigator({navigation, route}) {
   return (
     <SearchStack.Navigator>
-      <SearchStack.Screen name="SearchCharacter" component={SearchCharacterScreen} />
+      <SearchStack.Screen name="SearchCharacter" component={SearchCharacterScreen} options={{headerShown: false}}/>
       <SearchStack.Screen name="CharacterDetails" component={CharacterDetailsScreen} />
     </SearchStack.Navigator>
   )
